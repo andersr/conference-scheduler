@@ -1,0 +1,25 @@
+{
+  "name": "conference-scheduler",
+  "description": "Fit your talks into your conference session slots",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andersr/conference-scheduler.git"
+  },
+  "author": "Anders Ramsay <anders@anders.co>",
+  "homepage": "https://github.com/andersr/auto-test-file/#readme",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently 'yarn tsc:watch' 'yarn test:watch'",
+    "test:watch": "jest --watch",
+    "tsc:watch": "tsc -w"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.15",
+    "concurrently": "^5.1.0",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.4"
+  }
+}
