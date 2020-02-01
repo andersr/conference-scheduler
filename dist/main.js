@@ -57,6 +57,9 @@ var Track = /** @class */ (function () {
     Track.prototype.setScheduledTime = function () {
         return 'foo';
     };
+    Track.prototype.getSessions = function () {
+        console.log(' this.morningSessions: ', this.morningSessions);
+    };
     return Track;
 }());
 function getTalkData() {
@@ -66,11 +69,14 @@ function getTalkData() {
 var talkData = getTalkData();
 // console.log('talkData: ', talkData);
 function scheduleTalks(count, talks, scheduledTracks) {
+    // const unscheduledTalks = talks.filter(talk => !talk.track);
+    // console.log('unscheduledTalks: ', unscheduledTalks.length);
     if (scheduledTracks === void 0) { scheduledTracks = []; }
-    var unscheduledTalks = talks.filter(function (talk) { return !talk.track; });
-    console.log('unscheduledTalks: ', unscheduledTalks.length);
-    if (unscheduledTalks.length === 0 || count > 10) {
-        return scheduledTracks;
+    var remaining = talks.filter(function (talk) { return !talk.track; });
+    console.log('remaining: ', remaining.length);
+    if (count > 10) {
+        console.log('scheduledTracks: ', scheduledTracks);
+        // return scheduledTracks;
     }
     if (scheduledTracks.length === 0) {
         scheduledTracks.push(new Track(scheduledTracks.length + 1));
@@ -80,18 +86,22 @@ function scheduleTalks(count, talks, scheduledTracks) {
     }
     // if time remaining in the morning, try adding
     if (scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration > 0) {
-        var matchingTalk = unscheduledTalks.find(function (t) { return t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration; });
-        if (matchingTalk) {
-            scheduledTracks[scheduledTracks.length - 1].addToSession('morning', matchingTalk);
+        var index = talks.findIndex(function (t) { return t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration; });
+        console.log('index: ', index);
+        if (index) {
+            scheduledTracks[scheduledTracks.length - 1].addToSession('morning', talks[index]);
+            talks[index].track = scheduledTracks.length + 1;
+            scheduledTracks[scheduledTracks.length - 1].getSessions();
         }
     }
-    else if (scheduledTracks[scheduledTracks.length - 1].afternoonRemainingDuration > 0) {
-        var matchingTalk = unscheduledTalks.find(function (t) { return t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration; });
-        if (matchingTalk) {
-            scheduledTracks[scheduledTracks.length - 1].addToSession('afternoon', matchingTalk);
-        }
-    }
-    return scheduleTalks(count++, unscheduledTalks, scheduledTracks);
+    // else if(scheduledTracks[scheduledTracks.length - 1].afternoonRemainingDuration > 0){
+    //     const matchingTalk = unscheduledTalks.find(t => t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration);
+    //     if (matchingTalk) {
+    //         scheduledTracks[scheduledTracks.length - 1].addToSession('afternoon', matchingTalk)
+    //     }
+    // }
+    // console.log('scheduledTracks: ', scheduledTracks);
+    return scheduleTalks(count + 1, talks, scheduledTracks);
 }
-var scheduledTalks = scheduleTalks(0, talkData);
-console.log('scheduledTalks: ', scheduledTalks);
+scheduleTalks(0, talkData);
+// console.log('scheduledTalks: ', scheduledTalks);

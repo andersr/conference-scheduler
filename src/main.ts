@@ -17,6 +17,7 @@ class Track {
     constructor(num: number){
         this.trackNumber = num;
         this.morningSessions = [];
+        
         this.afternoonSessions = [];
         this.isFull = false;
         this.morningRemainingDuration = MORNING_SESSION_DURATION;
@@ -67,6 +68,10 @@ class Track {
     setScheduledTime(){
         return 'foo';
     }
+
+    getSessions() {
+        console.log(' this.morningSessions: ',  this.morningSessions);
+    }
 }
 
 function getTalkData(){
@@ -79,11 +84,15 @@ const talkData: Talk[] = getTalkData();
 
 function scheduleTalks(count: number, talks: Talk[], scheduledTracks: Track[] = []): Track[] {
     
-    const unscheduledTalks = talks.filter(talk => !talk.track);
-    console.log('unscheduledTalks: ', unscheduledTalks.length);
+    // const unscheduledTalks = talks.filter(talk => !talk.track);
+    // console.log('unscheduledTalks: ', unscheduledTalks.length);
 
-    if(unscheduledTalks.length === 0 || count > 10) {
-        return scheduledTracks;
+    const remaining = talks.filter(talk => !talk.track)
+    console.log('remaining: ', remaining.length);
+
+    if(count > 10) {
+        console.log('scheduledTracks: ', scheduledTracks);
+        // return scheduledTracks;
     }
 
     if (scheduledTracks.length === 0) {
@@ -95,24 +104,31 @@ function scheduleTalks(count: number, talks: Talk[], scheduledTracks: Track[] = 
     // if time remaining in the morning, try adding
     if (scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration > 0) {
     
-        const matchingTalk = unscheduledTalks.find(t => t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration);
+        const index = talks.findIndex(t => t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration);
+        console.log('index: ', index);
     
-        if (matchingTalk) {
-            scheduledTracks[scheduledTracks.length - 1].addToSession('morning', matchingTalk)
-        }
-    } else if(scheduledTracks[scheduledTracks.length - 1].afternoonRemainingDuration > 0){
-      
-        const matchingTalk = unscheduledTalks.find(t => t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration);
-    
-        if (matchingTalk) {
-            scheduledTracks[scheduledTracks.length - 1].addToSession('afternoon', matchingTalk)
-        }
-    }
+        if (index) {
 
-    return scheduleTalks(count++, unscheduledTalks, scheduledTracks)
+            scheduledTracks[scheduledTracks.length - 1].addToSession('morning', talks[index]);
+            talks[index].track = scheduledTracks.length + 1;
+
+            scheduledTracks[scheduledTracks.length - 1].getSessions();
+        }
+    } 
+    // else if(scheduledTracks[scheduledTracks.length - 1].afternoonRemainingDuration > 0){
+      
+    //     const matchingTalk = unscheduledTalks.find(t => t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration);
+    
+    //     if (matchingTalk) {
+    //         scheduledTracks[scheduledTracks.length - 1].addToSession('afternoon', matchingTalk)
+    //     }
+    // }
+    
+    // console.log('scheduledTracks: ', scheduledTracks);
+    return scheduleTalks(count + 1, talks, scheduledTracks)
 
 }
 
 
-const scheduledTalks = scheduleTalks(0, talkData);
-console.log('scheduledTalks: ', scheduledTalks);
+scheduleTalks(0, talkData);
+// console.log('scheduledTalks: ', scheduledTalks);
