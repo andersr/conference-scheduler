@@ -19,36 +19,24 @@ const getFile = (path: string) => {
 // }));
 
 export const readFile = async() => {
+
     
   try {
     const data = await getFile('./test.txt');
     // console.log('data: ', data);
 
     if (data) {
+
+        return data;
         
-        convertConfData(data)
+        // const talks = convertConfData(data)
     }
 
+    throw new Error('Error reading file.  Please try again.')
 
-    // const lines = raw.split('\n');
-    // const records = lines.slice(1, lines.length);
-    // const cleaned = {};
-    // let requestURL;
+    // 
 
-    // Array.from(records).forEach((record) => {
-    //   const fields = record.split(',');
 
-    //   if (requestURL) {
-    //     if (fields[2] === '200') {
-    //       cleaned[requestURL] = fields[3];
-    //       requestURL = undefined;
-    //     }
-    //   }
-
-    //   if (fields[2] === '301') {
-    //     requestURL = fields[3];
-    //   }
-    // });
 
     // const cleanedJSON = JSON.stringify(cleaned);
 
@@ -56,6 +44,7 @@ export const readFile = async() => {
   } catch (error) {
     console.warn('error: ', error);
   }
+
 };
 
 

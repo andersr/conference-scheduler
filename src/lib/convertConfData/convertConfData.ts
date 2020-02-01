@@ -1,8 +1,4 @@
-
-interface Talk {
-    name: string;
-    time: number;
-}
+import { Talk } from '../../models';
 
 const convertMinToNum = (str: string) => {
     const num = str.match(/.\d/);
@@ -21,7 +17,7 @@ export const convertConfData = (data: string) => {
             const name = line.replace(/lightning/, '');
             talks.push({
                 name,
-                time: 5
+                duration: 5
             })
         } else {
             const minStr =  line.match(/.\dmin/);
@@ -29,18 +25,20 @@ export const convertConfData = (data: string) => {
             // console.log('time: ', minStr);
             if (minStr) {
                 
-                const time = convertMinToNum(minStr[0]);
-                console.log(' time: ',  time);
+                const duration = convertMinToNum(minStr[0]);
+                // console.log(' time: ',  time);
 
-                if (time) {         
+                if (duration) {         
                     talks.push({
                         name,
-                        time,
+                        duration,
                     })
                 }
 
             }
         }
-    })
+    });
+
+    return talks;
 
 }

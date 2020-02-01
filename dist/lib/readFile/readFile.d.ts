@@ -1,1 +1,1 @@
-export declare const readFile: () => Promise<void>;
+export declare const readFile: () => Promise<string | undefined>;

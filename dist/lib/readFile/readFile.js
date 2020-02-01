@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var convertConfData_1 = require("../convertConfData/convertConfData");
 var fs = require('fs');
 var getFile = function (path) {
     var fileContent;
@@ -62,9 +61,10 @@ exports.readFile = function () { return __awaiter(void 0, void 0, void 0, functi
                 data = _a.sent();
                 // console.log('data: ', data);
                 if (data) {
-                    convertConfData_1.convertConfData(data);
+                    return [2 /*return*/, data];
+                    // const talks = convertConfData(data)
                 }
-                return [3 /*break*/, 3];
+                throw new Error('Error reading file.  Please try again.');
             case 2:
                 error_1 = _a.sent();
                 console.warn('error: ', error_1);

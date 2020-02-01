@@ -15,7 +15,7 @@ exports.convertConfData = function (data) {
             var name_1 = line.replace(/lightning/, '');
             talks.push({
                 name: name_1,
-                time: 5
+                duration: 5
             });
         }
         else {
@@ -23,15 +23,16 @@ exports.convertConfData = function (data) {
             var name_2 = line.replace(/.\dmin/, '');
             // console.log('time: ', minStr);
             if (minStr) {
-                var time = convertMinToNum(minStr[0]);
-                console.log(' time: ', time);
-                if (time) {
+                var duration = convertMinToNum(minStr[0]);
+                // console.log(' time: ',  time);
+                if (duration) {
                     talks.push({
                         name: name_2,
-                        time: time,
+                        duration: duration,
                     });
                 }
             }
         }
     });
+    return talks;
 };
