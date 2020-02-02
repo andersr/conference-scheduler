@@ -1,7 +1,6 @@
 import { Talk, TrackSession } from '../../models';
 
 const MORNING_SESSION_DURATION = 180;
-// const AFTERNOON_SESSION_MIN_DURATION = MORNING_SESSION_DURATION;
 const AFTERNOON_SESSION_MAX_DURATION = 240;
 
 export class Track {
@@ -39,12 +38,9 @@ export class Track {
 
         if (this.morningRemainingDuration > 0) {
             index = talks.findIndex(t => {
-                // console.log('t.duration: ', t.duration);
-                // console.log('this.morningRemainingDuration: ', this.morningRemainingDuration);
                 return t.duration <= this.morningRemainingDuration;
             });
             if (index !== -1) {
-                // console.log('index: ', index);
                 this.addToSession('morning', talks[index]);
             }
 
@@ -57,7 +53,6 @@ export class Track {
             }
         }
 
-        // console.log('index: ', index);
         return index;
     }
 
@@ -67,7 +62,7 @@ export class Track {
                 ...talk,
                 track: this.trackNumber,
                 session: type,
-                scheduledTime: this.setScheduledTime('morning', talk),
+                scheduledTime: this.setScheduledTime('morning', talk.duration),
             });
             this.morningRemainingDuration = Math.max(0, this.morningRemainingDuration - talk.duration);
         } else {
@@ -76,31 +71,44 @@ export class Track {
                 ...talk,
                 track: this.trackNumber,
                 session: type,
-                scheduledTime: this.setScheduledTime('afternoon', talk),
+                scheduledTime: this.setScheduledTime('afternoon', talk.duration),
             });
             this.afternoonRemainingDuration = Math.max(0, this.afternoonRemainingDuration - talk.duration);
         }
-        // this.shortestRemainingDuration = this.morningRemainingDuration <= this.afternoonRemainingDuration ? this.morningRemainingDuration : this.afternoonRemainingDuration;
     }
 
-    setScheduledTime(type: TrackSession, talk: Talk) {
+    setScheduledTime(type: TrackSession, duration: number) {
         const currentEndTime = type === 'morning' ? this.morningCurrentEndTime : this.afternoonCurrentEndTime;
         const hours = Math.floor(currentEndTime / 60);
         const minutes = currentEndTime % 60;
         const isAmPm = currentEndTime >= 720;
         if (type === 'morning') {
-            this.morningCurrentEndTime = this.morningCurrentEndTime + talk.duration;
+            this.morningCurrentEndTime = this.morningCurrentEndTime + duration;
         } else {
-            this.afternoonCurrentEndTime = this.afternoonCurrentEndTime + talk.duration;
+            this.afternoonCurrentEndTime = this.afternoonCurrentEndTime + duration;
         }
         return `${hours < 10 ? '0': ''}${hours > 12 ? hours - 12 : hours}:${minutes < 10 ? '0': ''}${minutes}${isAmPm ? 'PM' : 'AM'}`
     }
 
-    getTrackIsFull(shortestRemaingTalkDuration: number) {
-        return this.getNoTimeRemaining() || this.getInsufficientTimeRemaining(shortestRemaingTalkDuration);
+    addNetworkingEvent() {
+        this.addToSession('afternoon', {
+            name: 'Networking Event',
+            track: this.trackNumber,
+            session: 'afternoon',
+            duration: 0,
+            scheduledTime: this.setScheduledTime('afternoon', 0),
+        })
     }
 
-    getNoTimeRemaining() {
+    getTrackIsFull(shortestRemaingTalkDuration: number) {
+        const isFull = this.getNoTimeRemaining() || this.getInsufficientTimeRemaining(shortestRemaingTalkDuration);
+        // if (isFull && this.trackNumber === 1) {
+        //     this.addNetworkingEvent();
+        // }
+        return isFull;
+    }
+
+    private getNoTimeRemaining() {
         return this.morningRemainingDuration === 0 && this.afternoonRemainingDuration === 0;
     }
 
@@ -108,7 +116,7 @@ export class Track {
         return shortestRemaingTalkDuration > this.morningRemainingDuration && shortestRemaingTalkDuration > this.afternoonRemainingDuration;
     }
 
-    getShortestTimeRemaining() {
-        return this.morningRemainingDuration <= this.afternoonRemainingDuration ? this.morningRemainingDuration : this.afternoonRemainingDuration;
-    }
+    // getShortestTimeRemaining() {
+    //     return this.morningRemainingDuration <= this.afternoonRemainingDuration ? this.morningRemainingDuration : this.afternoonRemainingDuration;
+    // }
 }

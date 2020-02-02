@@ -16,9 +16,9 @@ export declare class Track {
     };
     addTalkToTrack(talks: Talk[]): number | undefined;
     addToSession(type: TrackSession, talk: Talk): void;
-    setScheduledTime(type: TrackSession, talk: Talk): string;
+    setScheduledTime(type: TrackSession, duration: number): string;
+    addNetworkingEvent(): void;
     getTrackIsFull(shortestRemaingTalkDuration: number): boolean;
-    getNoTimeRemaining(): boolean;
+    private getNoTimeRemaining;
     private getInsufficientTimeRemaining;
-    getShortestTimeRemaining(): number;
 }
