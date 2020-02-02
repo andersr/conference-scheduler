@@ -1,8 +1,8 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+// import { readFile } from './readFile';
 describe('readFile', function () {
-    it('reads in a text file', function () {
+    xit('reads in a text file', function () {
     });
-    it('parsese the file', function () {
+    xit('parsese the file', function () {
     });
 });

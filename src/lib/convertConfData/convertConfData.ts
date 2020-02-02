@@ -17,7 +17,7 @@ export const convertConfData = (data: string) => {
             const name = line.replace(/lightning/, '');
             talks.push({
                 name,
-                duration: 5
+                duration: 5,
             })
         } else {
             const minStr =  line.match(/.\dmin/);

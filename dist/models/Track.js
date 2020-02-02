@@ -1,2 +1,6 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+// import { Talk } from './Talk';
+// export interface Track {
+//     morningSession: Talk[];
+//     afternoonSession: Talk[];
+// }

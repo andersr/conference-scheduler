@@ -1,134 +1,33 @@
-import { convertConfData } from './lib/'
-import { Talk, TrackSession } from './models';
+import { convertConfData, Track, getShortestDuration } from './lib/'
+import { Talk } from './models';
 import fs from 'fs';
 
-const MORNING_SESSION_DURATION = 180;
-const AFTERNOON_SESSION_MIN_DURATION = MORNING_SESSION_DURATION;
-const AFTERNOON_SESSION_MAX_DURATION = 240;
-
-class Track {
-    public trackNumber: number;
-    public morningSessions: Talk[];
-    public afternoonSessions: Talk[];
-    public morningRemainingDuration: number;
-    public afternoonRemainingDuration: number;
-    public isFull: boolean;
-    
-    constructor(num: number){
-        this.trackNumber = num;
-        this.morningSessions = [];
-        
-        this.afternoonSessions = [];
-        this.isFull = false;
-        this.morningRemainingDuration = MORNING_SESSION_DURATION;
-        this.afternoonRemainingDuration = AFTERNOON_SESSION_MAX_DURATION;
-    }
-
-    getTrack(){
-        return ({
-            morningSessions: this.morningSessions,
-            afternoonSessions: this.afternoonSessions,
-        })
-    }
-
-    addToSession(type: TrackSession, talk: Talk){
-        if ( type === 'morning') {
-            this.morningSessions.push({
-                ...talk,
-                track: this.trackNumber,
-                session: type,
-                scheduledTime: this.setScheduledTime(),
-            })
-            this.morningRemainingDuration = this.morningRemainingDuration - talk.duration;
-        } else {
-            // add check here for between min and max allowed duration
-            this.afternoonSessions.push({
-                ...talk,
-                track: this.trackNumber,
-                session: type,
-                scheduledTime: this.setScheduledTime(),
-            });
-            this.afternoonRemainingDuration = this.afternoonRemainingDuration - talk.duration;
-        }
-
-        if (this.morningRemainingDuration === 0 && this.afternoonRemainingDuration === 0) {
-            this.isFull = true;
-        }
-        
-    }
-
-    getRemainingDuration(type: TrackSession){
-        const allowedDuration = type === 'morning' ? MORNING_SESSION_DURATION : AFTERNOON_SESSION_MAX_DURATION;
-        const session =  type === 'morning' ?  this.morningSessions : this.afternoonSessions;
-        const currentDuration =  session.reduce((acc, t) => t.duration + acc, 0);
-
-        return allowedDuration - currentDuration;
-    }
-
-    setScheduledTime(){
-        return 'foo';
-    }
-
-    getSessions() {
-        console.log(' this.morningSessions: ',  this.morningSessions);
-    }
+function getTalkData() {
+    const data = fs.readFileSync('./test.txt', 'utf8');
+    return convertConfData(data);
 }
 
-function getTalkData(){
-  const data = fs.readFileSync('./test.txt', 'utf8');
-   return convertConfData(data);
-}
+const data: Talk[] = getTalkData();
+const scheduledTracks: Track[] = [];
 
-const talkData: Talk[] = getTalkData();
-// console.log('talkData: ', talkData);
+function scheduleTalks(talks: Talk[], currentTrack: Track): Track[] {
 
-function scheduleTalks(count: number, talks: Talk[], scheduledTracks: Track[] = []): Track[] {
-    
-    // const unscheduledTalks = talks.filter(talk => !talk.track);
-    // console.log('unscheduledTalks: ', unscheduledTalks.length);
-
-    const remaining = talks.filter(talk => !talk.track)
-    console.log('remaining: ', remaining.length);
-
-    if(count > 10) {
-        console.log('scheduledTracks: ', scheduledTracks);
-        // return scheduledTracks;
+    const index = currentTrack.addTalkToTrack(talks);
+    if (index === 0 || !!index) {
+       talks.splice(index,1)
     }
 
-    if (scheduledTracks.length === 0) {
-        scheduledTracks.push(new Track(scheduledTracks.length + 1));
-    } else if(scheduledTracks[scheduledTracks.length - 1].isFull) {
-        scheduledTracks.push(new Track(scheduledTracks.length + 1));
+    if (talks.length === 0) {
+        return scheduledTracks;
     }
     
-    // if time remaining in the morning, try adding
-    if (scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration > 0) {
+    if (currentTrack.getTrackIsFull(getShortestDuration(talks))) {
+        scheduledTracks.push(currentTrack);
+        return scheduleTalks(talks, new Track(currentTrack.trackNumber + 1))
+    }
     
-        const index = talks.findIndex(t => t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration);
-        console.log('index: ', index);
-    
-        if (index) {
-
-            scheduledTracks[scheduledTracks.length - 1].addToSession('morning', talks[index]);
-            talks[index].track = scheduledTracks.length + 1;
-
-            scheduledTracks[scheduledTracks.length - 1].getSessions();
-        }
-    } 
-    // else if(scheduledTracks[scheduledTracks.length - 1].afternoonRemainingDuration > 0){
-      
-    //     const matchingTalk = unscheduledTalks.find(t => t.duration <= scheduledTracks[scheduledTracks.length - 1].morningRemainingDuration);
-    
-    //     if (matchingTalk) {
-    //         scheduledTracks[scheduledTracks.length - 1].addToSession('afternoon', matchingTalk)
-    //     }
-    // }
-    
-    // console.log('scheduledTracks: ', scheduledTracks);
-    return scheduleTalks(count + 1, talks, scheduledTracks)
-
+    return scheduleTalks(talks, currentTrack)
 }
 
-
-scheduleTalks(0, talkData);
-// console.log('scheduledTalks: ', scheduledTalks);
+const scheduledTalks = scheduleTalks(data, new Track(1));
+scheduledTalks.forEach(t => t.getSessions())

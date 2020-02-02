@@ -1,6 +1,6 @@
-import { Talk } from './Talk';
+// import { Talk } from './Talk';
 
-export interface Track {
-    morningSession: Talk[];
-    afternoonSession: Talk[];
-}
+// export interface Track {
+//     morningSession: Talk[];
+//     afternoonSession: Talk[];
+// }

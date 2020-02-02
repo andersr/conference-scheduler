@@ -15,7 +15,7 @@ exports.convertConfData = function (data) {
             var name_1 = line.replace(/lightning/, '');
             talks.push({
                 name: name_1,
-                duration: 5
+                duration: 5,
             });
         }
         else {
