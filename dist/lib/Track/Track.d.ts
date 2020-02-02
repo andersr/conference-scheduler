@@ -18,8 +18,7 @@ export declare class Track {
     addToSession(type: TrackSession, talk: Talk): void;
     setScheduledTime(type: TrackSession, talk: Talk): string;
     getTrackIsFull(shortestRemaingTalkDuration: number): boolean;
-    getSessions(): void;
     getNoTimeRemaining(): boolean;
-    getInufficientTimeRemaining(shortestRemaingTalkDuration: number): boolean;
+    private getInsufficientTimeRemaining;
     getShortestTimeRemaining(): number;
 }

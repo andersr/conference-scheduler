@@ -26,7 +26,7 @@ function scheduleTalks(talks, currentTrack) {
     return scheduleTalks(talks, currentTrack);
 }
 function outputSchedule(tracks) {
-    tracks.forEach(function (track) {
+    tracks.forEach(function (track, index) {
         console.log(" ");
         console.log("Track " + track.trackNumber + ":");
         track.morningSessions.forEach(function (talk) {
@@ -36,8 +36,10 @@ function outputSchedule(tracks) {
         track.afternoonSessions.forEach(function (talk) {
             console.log("      " + talk.scheduledTime + " " + talk.name + " " + (talk.duration === 5 ? 'lightning' : talk.duration + "min"));
         });
+        if (index === 0) {
+            console.log('      05:00PM Networking Event');
+        }
     });
 }
 var scheduledTalks = scheduleTalks(data, new lib_1.Track(1));
 outputSchedule(scheduledTalks);
-// scheduledTalks.forEach(t => t.getSessions())

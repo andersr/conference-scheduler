@@ -31,7 +31,7 @@ function scheduleTalks(talks: Talk[], currentTrack: Track): Track[] {
 
 function outputSchedule(tracks: Track[]){
 
-    tracks.forEach(track =>{
+    tracks.forEach((track, index) =>{
         console.log(` `);
         console.log(`Track ${track.trackNumber}:`);
         track.morningSessions.forEach((talk) => {
@@ -41,9 +41,11 @@ function outputSchedule(tracks: Track[]){
         track.afternoonSessions.forEach((talk) => {
             console.log(`      ${talk.scheduledTime} ${talk.name} ${talk.duration === 5 ? 'lightning' : `${talk.duration}min`}`);
         })
+        if (index === 0) {
+            console.log('      05:00PM Networking Event'); 
+        }
     });
 }
 
 const scheduledTalks = scheduleTalks(data, new Track(1));
 outputSchedule(scheduledTalks);
-// scheduledTalks.forEach(t => t.getSessions())

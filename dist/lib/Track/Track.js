@@ -81,18 +81,12 @@ var Track = /** @class */ (function () {
         return "" + (hours < 10 ? '0' : '') + (hours > 12 ? hours - 12 : hours) + ":" + (minutes < 10 ? '0' : '') + minutes + (isAmPm ? 'PM' : 'AM');
     };
     Track.prototype.getTrackIsFull = function (shortestRemaingTalkDuration) {
-        return this.getNoTimeRemaining() || this.getInufficientTimeRemaining(shortestRemaingTalkDuration);
-    };
-    Track.prototype.getSessions = function () {
-        console.log(' this.morningSessions: ', this.morningSessions);
-        console.log(' this.afternoonSessions: ', this.afternoonSessions);
+        return this.getNoTimeRemaining() || this.getInsufficientTimeRemaining(shortestRemaingTalkDuration);
     };
     Track.prototype.getNoTimeRemaining = function () {
         return this.morningRemainingDuration === 0 && this.afternoonRemainingDuration === 0;
     };
-    Track.prototype.getInufficientTimeRemaining = function (shortestRemaingTalkDuration) {
-        // console.log('shortestRemaingTalkDuration: ', shortestRemaingTalkDuration);
-        // console.log('this.afternoonRemainingDuration: ', this.afternoonRemainingDuration);
+    Track.prototype.getInsufficientTimeRemaining = function (shortestRemaingTalkDuration) {
         return shortestRemaingTalkDuration > this.morningRemainingDuration && shortestRemaingTalkDuration > this.afternoonRemainingDuration;
     };
     Track.prototype.getShortestTimeRemaining = function () {

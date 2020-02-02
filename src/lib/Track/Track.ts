@@ -97,21 +97,14 @@ export class Track {
     }
 
     getTrackIsFull(shortestRemaingTalkDuration: number) {
-        return this.getNoTimeRemaining() || this.getInufficientTimeRemaining(shortestRemaingTalkDuration);
-    }
-
-    getSessions() {
-        console.log(' this.morningSessions: ', this.morningSessions);
-        console.log(' this.afternoonSessions: ', this.afternoonSessions);
+        return this.getNoTimeRemaining() || this.getInsufficientTimeRemaining(shortestRemaingTalkDuration);
     }
 
     getNoTimeRemaining() {
         return this.morningRemainingDuration === 0 && this.afternoonRemainingDuration === 0;
     }
 
-    getInufficientTimeRemaining(shortestRemaingTalkDuration: number) {
-        // console.log('shortestRemaingTalkDuration: ', shortestRemaingTalkDuration);
-        // console.log('this.afternoonRemainingDuration: ', this.afternoonRemainingDuration);
+    private getInsufficientTimeRemaining(shortestRemaingTalkDuration: number) {
         return shortestRemaingTalkDuration > this.morningRemainingDuration && shortestRemaingTalkDuration > this.afternoonRemainingDuration;
     }
 
