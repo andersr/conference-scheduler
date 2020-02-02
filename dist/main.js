@@ -25,5 +25,19 @@ function scheduleTalks(talks, currentTrack) {
     }
     return scheduleTalks(talks, currentTrack);
 }
+function outputSchedule(tracks) {
+    tracks.forEach(function (track) {
+        console.log(" ");
+        console.log("Track " + track.trackNumber + ":");
+        track.morningSessions.forEach(function (talk) {
+            console.log("      " + talk.scheduledTime + " " + talk.name + " " + (talk.duration === 5 ? 'lightning' : talk.duration + "min"));
+        });
+        console.log('      12:00PM Lunch');
+        track.afternoonSessions.forEach(function (talk) {
+            console.log("      " + talk.scheduledTime + " " + talk.name + " " + (talk.duration === 5 ? 'lightning' : talk.duration + "min"));
+        });
+    });
+}
 var scheduledTalks = scheduleTalks(data, new lib_1.Track(1));
-scheduledTalks.forEach(function (t) { return t.getSessions(); });
+outputSchedule(scheduledTalks);
+// scheduledTalks.forEach(t => t.getSessions())

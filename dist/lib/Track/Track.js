@@ -21,6 +21,10 @@ var Track = /** @class */ (function () {
         this.afternoonSessions = [];
         this.morningRemainingDuration = MORNING_SESSION_DURATION;
         this.afternoonRemainingDuration = AFTERNOON_SESSION_MAX_DURATION;
+        this.morningStartTime = 540; // 9:00 AM in minutes
+        this.afternoonStarTime = 780; // 1:00 PM or 1300 hours in minutes
+        this.morningCurrentEndTime = this.morningStartTime;
+        this.afternoonCurrentEndTime = this.afternoonStarTime;
     }
     Track.prototype.getTrack = function () {
         return ({
@@ -53,18 +57,28 @@ var Track = /** @class */ (function () {
     };
     Track.prototype.addToSession = function (type, talk) {
         if (type === 'morning') {
-            this.morningSessions.push(__assign(__assign({}, talk), { track: this.trackNumber, session: type, scheduledTime: this.setScheduledTime() }));
+            this.morningSessions.push(__assign(__assign({}, talk), { track: this.trackNumber, session: type, scheduledTime: this.setScheduledTime('morning', talk) }));
             this.morningRemainingDuration = Math.max(0, this.morningRemainingDuration - talk.duration);
         }
         else {
             // TODO: add check here for between min and max allowed duration
-            this.afternoonSessions.push(__assign(__assign({}, talk), { track: this.trackNumber, session: type, scheduledTime: this.setScheduledTime() }));
+            this.afternoonSessions.push(__assign(__assign({}, talk), { track: this.trackNumber, session: type, scheduledTime: this.setScheduledTime('afternoon', talk) }));
             this.afternoonRemainingDuration = Math.max(0, this.afternoonRemainingDuration - talk.duration);
         }
         // this.shortestRemainingDuration = this.morningRemainingDuration <= this.afternoonRemainingDuration ? this.morningRemainingDuration : this.afternoonRemainingDuration;
     };
-    Track.prototype.setScheduledTime = function () {
-        return 'foo';
+    Track.prototype.setScheduledTime = function (type, talk) {
+        var currentEndTime = type === 'morning' ? this.morningCurrentEndTime : this.afternoonCurrentEndTime;
+        var hours = Math.floor(currentEndTime / 60);
+        var minutes = currentEndTime % 60;
+        var isAmPm = currentEndTime >= 720;
+        if (type === 'morning') {
+            this.morningCurrentEndTime = this.morningCurrentEndTime + talk.duration;
+        }
+        else {
+            this.afternoonCurrentEndTime = this.afternoonCurrentEndTime + talk.duration;
+        }
+        return "" + (hours < 10 ? '0' : '') + (hours > 12 ? hours - 12 : hours) + ":" + (minutes < 10 ? '0' : '') + minutes + (isAmPm ? 'PM' : 'AM');
     };
     Track.prototype.getTrackIsFull = function (shortestRemaingTalkDuration) {
         return this.getNoTimeRemaining() || this.getInufficientTimeRemaining(shortestRemaingTalkDuration);
@@ -77,8 +91,8 @@ var Track = /** @class */ (function () {
         return this.morningRemainingDuration === 0 && this.afternoonRemainingDuration === 0;
     };
     Track.prototype.getInufficientTimeRemaining = function (shortestRemaingTalkDuration) {
-        console.log('shortestRemaingTalkDuration: ', shortestRemaingTalkDuration);
-        console.log('this.afternoonRemainingDuration: ', this.afternoonRemainingDuration);
+        // console.log('shortestRemaingTalkDuration: ', shortestRemaingTalkDuration);
+        // console.log('this.afternoonRemainingDuration: ', this.afternoonRemainingDuration);
         return shortestRemaingTalkDuration > this.morningRemainingDuration && shortestRemaingTalkDuration > this.afternoonRemainingDuration;
     };
     Track.prototype.getShortestTimeRemaining = function () {

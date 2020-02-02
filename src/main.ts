@@ -29,5 +29,21 @@ function scheduleTalks(talks: Talk[], currentTrack: Track): Track[] {
     return scheduleTalks(talks, currentTrack)
 }
 
+function outputSchedule(tracks: Track[]){
+
+    tracks.forEach(track =>{
+        console.log(` `);
+        console.log(`Track ${track.trackNumber}:`);
+        track.morningSessions.forEach((talk) => {
+            console.log(`      ${talk.scheduledTime} ${talk.name} ${talk.duration === 5 ? 'lightning' : `${talk.duration}min`}`);
+        })
+        console.log('      12:00PM Lunch');
+        track.afternoonSessions.forEach((talk) => {
+            console.log(`      ${talk.scheduledTime} ${talk.name} ${talk.duration === 5 ? 'lightning' : `${talk.duration}min`}`);
+        })
+    });
+}
+
 const scheduledTalks = scheduleTalks(data, new Track(1));
-scheduledTalks.forEach(t => t.getSessions())
+outputSchedule(scheduledTalks);
+// scheduledTalks.forEach(t => t.getSessions())
