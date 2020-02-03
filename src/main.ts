@@ -1,6 +1,6 @@
 import { convertDataToTalks, outputSchedule, readFile, createSchedule } from './lib/'
 
-function init(){
+(function(){
     
     const data = readFile('./talks.txt');
     if (!data) {
@@ -10,6 +10,5 @@ function init(){
     const talks = convertDataToTalks(data);
     const scheduledTalks = createSchedule(talks);
     outputSchedule(scheduledTalks);
-}
+})();
 
-init();
