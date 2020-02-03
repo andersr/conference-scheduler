@@ -1,7 +1,7 @@
 import { Track } from '../Track/'
 
 export const outputSchedule = (tracks: Track[]) => {
-    tracks.forEach((track) =>{
+    tracks.forEach((track) => {
         console.log(` `);
         console.log(`Track ${track.trackNumber}:`);
         track.morningSessions.forEach((talk) => {
@@ -11,7 +11,7 @@ export const outputSchedule = (tracks: Track[]) => {
             console.log('      12:00PM Lunch');
         }
         track.afternoonSessions.forEach((talk) => {
-            console.log(`      ${talk.scheduledTime} ${talk.name} ${talk.duration === 5 ? 'lightning' : talk.duration === 0 ? '': `${talk.duration}min`}`);
+            console.log(`      ${talk.scheduledTime} ${talk.name} ${talk.duration === 5 ? 'lightning' : talk.duration === 0 ? '' : `${talk.duration}min`}`);
         })
     });
 }

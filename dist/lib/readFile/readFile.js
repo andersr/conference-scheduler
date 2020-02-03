@@ -12,7 +12,7 @@ exports.readFile = function (path) {
         }
         data = fs_1.default.readFileSync(path, 'utf8');
         if (!data) {
-            throw new Error('Sorry, there was a problem reading the file.  Please try again.');
+            throw new Error('Sorry, there was a problem reading the file. Please try again.');
         }
     }
     catch (error) {

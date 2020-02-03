@@ -4,7 +4,7 @@ import { convertNumStringToNumber } from '../convertNumStringToNumber/convertNum
 export const convertDataToTalks = (data: string) => {
     const lines = data.split('\n');
     const talks: Talk[] = [];
-    
+
     lines.forEach((line: string) => {
         if (line.match(/lightning/)) {
             const name = line.replace(/lightning/, '');
@@ -13,13 +13,13 @@ export const convertDataToTalks = (data: string) => {
                 duration: 5,
             })
         } else {
-            const minStr =  line.match(/.\dmin/);
+            const minStr = line.match(/.\dmin/);
             const name = line.replace(/.\dmin/, '');
             if (minStr) {
-                
+
                 const duration = convertNumStringToNumber(minStr[0]);
 
-                if (duration) {         
+                if (duration) {
                     talks.push({
                         name: name.trim(),
                         duration,
@@ -31,5 +31,4 @@ export const convertDataToTalks = (data: string) => {
     });
 
     return talks;
-
 }
