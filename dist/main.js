@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var lib_1 = require("./lib/");
 var fs_1 = __importDefault(require("fs"));
 function getTalkData() {
-    var data = fs_1.default.readFileSync('./test.txt', 'utf8');
+    var data = fs_1.default.readFileSync('./talks.txt', 'utf8');
     return lib_1.convertConfData(data);
 }
 var data = getTalkData();
@@ -25,7 +25,6 @@ function scheduleTalks(talks, currentTrack) {
     if (currentTrack.getTrackIsFull(shortestRemainingDuration)) {
         if (currentTrack.trackNumber === 1) {
             currentTrack.afternoonCurrentEndTime;
-            console.log(' currentTrack.afternoonCurrentEndTime: ', currentTrack.afternoonCurrentEndTime);
             currentTrack.addNetworkingEvent();
         }
         scheduledTracks.push(currentTrack);

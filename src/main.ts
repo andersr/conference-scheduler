@@ -3,7 +3,7 @@ import { Talk } from './models';
 import fs from 'fs';
 
 function getTalkData() {
-    const data = fs.readFileSync('./test.txt', 'utf8');
+    const data = fs.readFileSync('./talks.txt', 'utf8');
     return convertConfData(data);
 }
 
@@ -26,7 +26,6 @@ function scheduleTalks(talks: Talk[], currentTrack: Track): Track[] {
     if (currentTrack.getTrackIsFull(shortestRemainingDuration)) {
         if (currentTrack.trackNumber === 1) {
             currentTrack.afternoonCurrentEndTime
-            console.log(' currentTrack.afternoonCurrentEndTime: ',  currentTrack.afternoonCurrentEndTime);
             currentTrack.addNetworkingEvent();
         }
         scheduledTracks.push(currentTrack);
