@@ -11,26 +11,19 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var MORNING_SESSION_DURATION = 180;
-var AFTERNOON_SESSION_MAX_DURATION = 240;
+var constants_1 = require("../../constants");
 var Track = /** @class */ (function () {
     function Track(num) {
         this.trackNumber = num;
         this.morningSessions = [];
         this.afternoonSessions = [];
-        this.morningRemainingDuration = MORNING_SESSION_DURATION;
-        this.afternoonRemainingDuration = AFTERNOON_SESSION_MAX_DURATION;
-        this.morningStartTime = 540; // 9:00 AM in minutes
-        this.afternoonStarTime = 780; // 1:00 PM or 1300 hours in minutes
+        this.morningRemainingDuration = constants_1.MORNING_SESSION_DURATION;
+        this.afternoonRemainingDuration = constants_1.AFTERNOON_SESSION_MAX_DURATION;
+        this.morningStartTime = constants_1.MORNING_START_TIME;
+        this.afternoonStarTime = constants_1.AFTERNOON_START_TIME;
         this.morningCurrentEndTime = this.morningStartTime;
         this.afternoonCurrentEndTime = this.afternoonStarTime;
     }
-    Track.prototype.getTrack = function () {
-        return ({
-            morningSessions: this.morningSessions,
-            afternoonSessions: this.afternoonSessions,
-        });
-    };
     Track.prototype.addTalkToTrack = function (talks) {
         var _this = this;
         var index;
@@ -56,7 +49,6 @@ var Track = /** @class */ (function () {
             this.morningRemainingDuration = Math.max(0, this.morningRemainingDuration - talk.duration);
         }
         else {
-            // TODO: add check here for between min and max allowed duration
             this.afternoonSessions.push(__assign(__assign({}, talk), { track: this.trackNumber, session: type, scheduledTime: this.setScheduledTime('afternoon', talk.duration) }));
             this.afternoonRemainingDuration = Math.max(0, this.afternoonRemainingDuration - talk.duration);
         }
@@ -84,11 +76,7 @@ var Track = /** @class */ (function () {
         });
     };
     Track.prototype.getTrackIsFull = function (shortestRemaingTalkDuration) {
-        var isFull = this.getNoTimeRemaining() || this.getInsufficientTimeRemaining(shortestRemaingTalkDuration);
-        // if (isFull && this.trackNumber === 1) {
-        //     this.addNetworkingEvent();
-        // }
-        return isFull;
+        return this.getNoTimeRemaining() || this.getInsufficientTimeRemaining(shortestRemaingTalkDuration);
     };
     Track.prototype.getNoTimeRemaining = function () {
         return this.morningRemainingDuration === 0 && this.afternoonRemainingDuration === 0;

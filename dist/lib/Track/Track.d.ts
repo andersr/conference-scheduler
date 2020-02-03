@@ -10,10 +10,6 @@ export declare class Track {
     morningCurrentEndTime: number;
     afternoonCurrentEndTime: number;
     constructor(num: number);
-    getTrack(): {
-        morningSessions: Talk[];
-        afternoonSessions: Talk[];
-    };
     addTalkToTrack(talks: Talk[]): number | undefined;
     addToSession(type: TrackSession, talk: Talk): void;
     setScheduledTime(type: TrackSession, duration: number): string;

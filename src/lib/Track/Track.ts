@@ -1,7 +1,5 @@
 import { Talk, TrackSession } from '../../models';
-
-const MORNING_SESSION_DURATION = 180;
-const AFTERNOON_SESSION_MAX_DURATION = 240;
+import { MORNING_SESSION_DURATION, AFTERNOON_SESSION_MAX_DURATION, MORNING_START_TIME, AFTERNOON_START_TIME } from '../../constants';
 
 export class Track {
     public trackNumber: number;
@@ -20,17 +18,10 @@ export class Track {
         this.afternoonSessions = [];
         this.morningRemainingDuration = MORNING_SESSION_DURATION;
         this.afternoonRemainingDuration = AFTERNOON_SESSION_MAX_DURATION;
-        this.morningStartTime = 540; // 9:00 AM in minutes
-        this.afternoonStarTime = 780; // 1:00 PM or 1300 hours in minutes
+        this.morningStartTime = MORNING_START_TIME; 
+        this.afternoonStarTime = AFTERNOON_START_TIME; 
         this.morningCurrentEndTime = this.morningStartTime;
         this.afternoonCurrentEndTime = this.afternoonStarTime;
-    }
-
-    getTrack() {
-        return ({
-            morningSessions: this.morningSessions,
-            afternoonSessions: this.afternoonSessions,
-        })
     }
 
     addTalkToTrack(talks: Talk[]) {
@@ -66,7 +57,6 @@ export class Track {
             });
             this.morningRemainingDuration = Math.max(0, this.morningRemainingDuration - talk.duration);
         } else {
-            // TODO: add check here for between min and max allowed duration
             this.afternoonSessions.push({
                 ...talk,
                 track: this.trackNumber,
@@ -101,11 +91,7 @@ export class Track {
     }
 
     getTrackIsFull(shortestRemaingTalkDuration: number) {
-        const isFull = this.getNoTimeRemaining() || this.getInsufficientTimeRemaining(shortestRemaingTalkDuration);
-        // if (isFull && this.trackNumber === 1) {
-        //     this.addNetworkingEvent();
-        // }
-        return isFull;
+        return this.getNoTimeRemaining() || this.getInsufficientTimeRemaining(shortestRemaingTalkDuration);
     }
 
     private getNoTimeRemaining() {
@@ -115,8 +101,4 @@ export class Track {
     private getInsufficientTimeRemaining(shortestRemaingTalkDuration: number) {
         return shortestRemaingTalkDuration > this.morningRemainingDuration && shortestRemaingTalkDuration > this.afternoonRemainingDuration;
     }
-
-    // getShortestTimeRemaining() {
-    //     return this.morningRemainingDuration <= this.afternoonRemainingDuration ? this.morningRemainingDuration : this.afternoonRemainingDuration;
-    // }
 }
