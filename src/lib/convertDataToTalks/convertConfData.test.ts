@@ -1,26 +1,32 @@
-// import { convertConfData } from './convertConfData';
+import { convertDataToTalks } from './convertDataToTalks';
+import { Talk } from '../../models';
 
-describe('convertConfData', () => {
-      
- xit('sets the talk name as all text preceding the first numeral', () => {
-    expect.hasAssertions();
+describe('convertDataToTalks', () => {
+
+  it('converts a list of talk data to a talks object', () => {
+
+    const EXPECTED: Talk[] = [
+      {
+        name: 'Proper Unit Tests for Anyone',
+        duration: 60,
+      },
+      {
+        name: 'From Java 8 to Java 12',
+        duration: 5,
+      },
+      {
+        name: 'Effective DSL (Domain Specific Languages)',
+        duration: 30,
+      }
+    ];
+
+    const MOCK_DATA = `
+        Proper Unit Tests for Anyone 60min
+        From Java 8 to Java 12 lightning
+        Effective DSL (Domain Specific Languages) 30min
+        `;
+    expect(convertDataToTalks(MOCK_DATA)).toMatchObject(EXPECTED);
   });
-  
-  // it("sets talk length to 5 if 'lightning' is found", () => {
-  //   expect.hasAssertions();
-  // });
-  
-  // it("converts a 'NNmin' string to a NN numeral", () => {
-  //   expect.hasAssertions();
-  // });
-
-  // it("sets the converted numeral to the talk length", () => {
-  //   expect.hasAssertions();
-  // });  
-
-  // it("return an array of all talks", () => {
-  //   expect.hasAssertions();
-  // });
 
 });
 

@@ -9,7 +9,7 @@ export const convertDataToTalks = (data: string) => {
         if (line.match(/lightning/)) {
             const name = line.replace(/lightning/, '');
             talks.push({
-                name,
+                name: name.trim(),
                 duration: 5,
             })
         } else {
@@ -21,7 +21,7 @@ export const convertDataToTalks = (data: string) => {
 
                 if (duration) {         
                     talks.push({
-                        name,
+                        name: name.trim(),
                         duration,
                     })
                 }
