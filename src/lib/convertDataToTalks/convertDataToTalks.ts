@@ -1,14 +1,7 @@
 import { Talk } from '../../models';
+import { convertNumStringToNumber } from '../convertNumStringToNumber/convertNumStringToNumber';
 
-const convertMinToNum = (str: string) => {
-    const num = str.match(/.\d/);
-    if (num) {
-        return parseInt(num[0], 10)
-    }
-    return null;
-}
-
-export const convertConfData = (data: string) => {
+export const convertDataToTalks = (data: string) => {
     const lines = data.split('\n');
     const talks: Talk[] = [];
     
@@ -22,11 +15,9 @@ export const convertConfData = (data: string) => {
         } else {
             const minStr =  line.match(/.\dmin/);
             const name = line.replace(/.\dmin/, '');
-            // console.log('time: ', minStr);
             if (minStr) {
                 
-                const duration = convertMinToNum(minStr[0]);
-                // console.log(' time: ',  time);
+                const duration = convertNumStringToNumber(minStr[0]);
 
                 if (duration) {         
                     talks.push({

@@ -6,9 +6,8 @@ function init() {
     if (!data) {
         return;
     }
-    var parsed = lib_1.convertConfData(data);
-    var scheduledTalks = lib_1.createSchedule(parsed);
+    var talks = lib_1.convertDataToTalks(data);
+    var scheduledTalks = lib_1.createSchedule(talks);
     lib_1.outputSchedule(scheduledTalks);
 }
 init();
-// handle error

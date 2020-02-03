@@ -1,4 +1,4 @@
-import { convertConfData, outputSchedule, readFile, createSchedule } from './lib/'
+import { convertDataToTalks, outputSchedule, readFile, createSchedule } from './lib/'
 
 function init(){
     
@@ -6,12 +6,10 @@ function init(){
     if (!data) {
         return;
     }
-    const parsed = convertConfData(data);
-    
-    const scheduledTalks = createSchedule(parsed);
+
+    const talks = convertDataToTalks(data);
+    const scheduledTalks = createSchedule(talks);
     outputSchedule(scheduledTalks);
 }
 
 init();
-// handle error
-
