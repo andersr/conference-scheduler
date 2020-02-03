@@ -8,7 +8,7 @@ exports.convertDataToTalks = function (data) {
         if (line.match(/lightning/)) {
             var name_1 = line.replace(/lightning/, '');
             talks.push({
-                name: name_1,
+                name: name_1.trim(),
                 duration: 5,
             });
         }
@@ -19,7 +19,7 @@ exports.convertDataToTalks = function (data) {
                 var duration = convertNumStringToNumber_1.convertNumStringToNumber(minStr[0]);
                 if (duration) {
                     talks.push({
-                        name: name_2,
+                        name: name_2.trim(),
                         duration: duration,
                     });
                 }

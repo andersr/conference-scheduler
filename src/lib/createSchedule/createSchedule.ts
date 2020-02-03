@@ -9,14 +9,14 @@ export const createSchedule = (data: Talk[]) => {
 
         const index = currentTrack.addTalkToTrack(talks);
         if (index === 0 || !!index) {
-           talks.splice(index,1)
+            talks.splice(index, 1)
         }
-    
+
         if (talks.length === 0) {
             scheduledTracks.push(currentTrack);
             return scheduledTracks;
         }
-        
+
         const shortestRemainingDuration = getShortestDuration(talks);
         if (currentTrack.getTrackIsFull(shortestRemainingDuration)) {
             if (currentTrack.trackNumber === 1) {
@@ -26,7 +26,7 @@ export const createSchedule = (data: Talk[]) => {
             scheduledTracks.push(currentTrack);
             return scheduleGenerator(talks, new Track(currentTrack.trackNumber + 1))
         }
-        
+
         return scheduleGenerator(talks, currentTrack)
     }
 
