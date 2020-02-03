@@ -1,38 +1,17 @@
-import { convertConfData, Track, getShortestDuration, outputSchedule } from './lib/'
-import { Talk } from './models';
-import fs from 'fs';
+import { convertConfData, outputSchedule, readFile, createSchedule } from './lib/'
 
-function getTalkData() {
-    const data = fs.readFileSync('./talks.txt', 'utf8');
-    return convertConfData(data);
-}
-
-const data: Talk[] = getTalkData();
-const scheduledTracks: Track[] = [];
-
-function scheduleTalks(talks: Talk[], currentTrack: Track): Track[] {
-
-    const index = currentTrack.addTalkToTrack(talks);
-    if (index === 0 || !!index) {
-       talks.splice(index,1)
-    }
-
-    if (talks.length === 0) {
-        scheduledTracks.push(currentTrack);
-        return scheduledTracks;
-    }
-    const shortestRemainingDuration = getShortestDuration(talks);
-    if (currentTrack.getTrackIsFull(shortestRemainingDuration)) {
-        if (currentTrack.trackNumber === 1) {
-            currentTrack.afternoonCurrentEndTime
-            currentTrack.addNetworkingEvent();
-        }
-        scheduledTracks.push(currentTrack);
-        return scheduleTalks(talks, new Track(currentTrack.trackNumber + 1))
-    }
+function init(){
     
-    return scheduleTalks(talks, currentTrack)
+    const data = readFile('./talks.txt');
+    if (!data) {
+        return;
+    }
+    const parsed = convertConfData(data);
+    
+    const scheduledTalks = createSchedule(parsed);
+    outputSchedule(scheduledTalks);
 }
 
-const scheduledTalks = scheduleTalks(data, new Track(1));
-outputSchedule(scheduledTalks);
+init();
+// handle error
+

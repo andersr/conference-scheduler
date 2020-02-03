@@ -1,50 +1,21 @@
-// // import { convertConfData } from '../convertConfData/convertConfData';
+import fs from 'fs';
 
-// const fs = require('fs');
-
-// const getFile = (path: string) => {
-//   let fileContent: string;
-
-//   return new Promise<string>(((resolve) => {
-//     fileContent = fs.readFileSync(path, { encoding: 'utf8' });
-//     resolve(fileContent);
-//   }));
-// };
-
-// // const writeFile = (path, content) => new Promise(((resolve) => {
-// //   fs.writeFileSync(path, content, (err) => {
-// //     if (err) { throw err; }
-// //     resolve();
-// //   });
-// // }));
-
-// export const readFile = async() => {
-
-    
-//   try {
-//     const data = await getFile('./test.txt');
-//     // console.log('data: ', data);
-
-//     if (data) {
-
-//         return data;
+export const readFile = (path: string) => {
+    let data;
+    try {
+        if (!fs.existsSync(path)) {
+            throw new Error("No file named 'talks.txt' found.  Please try again.");
+        }
         
-//         // const talks = convertConfData(data)
-//     }
+        data = fs.readFileSync(path, 'utf8');
 
-//     throw new Error('Error reading file.  Please try again.')
+        if (!data) {
+            throw new Error('Sorry, there was a problem reading the file.  Please try again.')
+        }
 
-//     // 
+    } catch (error) {
+        console.log(error.message);
+    }
+    return data;
 
-
-
-//     // const cleanedJSON = JSON.stringify(cleaned);
-
-//     // await writeFile('./ouput.json', cleanedJSON);
-//   } catch (error) {
-//     console.warn('error: ', error);
-//   }
-
-// };
-
-
+}
