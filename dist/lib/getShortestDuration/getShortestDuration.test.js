@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var getShortestDuration_1 = require("./getShortestDuration");
 describe('getShortestDuration', function () {
-    it('returns the duration of the talk with the shortest duration', function () {
+    it('returns the shortest duration in a collection of talks', function () {
         var MOCK_TALKS = [
             {
                 name: 'Proper Unit Tests for Anyone ',
@@ -25,12 +25,9 @@ describe('getShortestDuration', function () {
                 duration: 60,
             }
         ];
-        var expected = 30;
-        expect(getShortestDuration_1.getShortestDuration(MOCK_TALKS)).toStrictEqual(expected);
+        expect(getShortestDuration_1.getShortestDuration(MOCK_TALKS)).toStrictEqual(30);
     });
-    it('returns max talk duration if no talks are found', function () {
-        var MOCK_TALKS = [];
-        var expected = 0;
-        expect(getShortestDuration_1.getShortestDuration(MOCK_TALKS)).toStrictEqual(expected);
+    it('returns a duration of 0 if no talks are found', function () {
+        expect(getShortestDuration_1.getShortestDuration([])).toStrictEqual(0);
     });
 });

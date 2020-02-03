@@ -3,7 +3,7 @@ import { Talk } from '../../models';
 
 describe('getShortestDuration', () => {
 
-    it('returns the duration of the talk with the shortest duration', () => {
+    it('returns the shortest duration in a collection of talks', () => {
         const MOCK_TALKS: Talk[] = [
             {
                 name: 'Proper Unit Tests for Anyone ',
@@ -27,15 +27,11 @@ describe('getShortestDuration', () => {
             }
         ];
 
-        const expected = 30;
-        expect(getShortestDuration(MOCK_TALKS)).toStrictEqual(expected);
+        expect(getShortestDuration(MOCK_TALKS)).toStrictEqual(30);
     });
 
-    it('returns max talk duration if no talks are found', () => {
-        const MOCK_TALKS: Talk[] = [];
-
-        const expected = 0;
-        expect(getShortestDuration(MOCK_TALKS)).toStrictEqual(expected);
+    it('returns a duration of 0 if no talks are found', () => {
+        expect(getShortestDuration([])).toStrictEqual(0);
     });
 
 });
