@@ -20,7 +20,7 @@ Generate a conference schedule from a list of talks in a text file.
 - Each talk will appear on a new line.
 
 ## How the schedule is generated
-First, we parse the text file and convert that into a 'talks' array, with properties for talk title and talk duration. Then we instantiate a new `Track` anbd pass that and our talks into a `createSchedule` function, which recursively adds talks to the Track class, until no talks remain.
+First, we parse the text file and convert that into a 'talks' array, with properties for talk title and talk duration. Then we instantiate a new `Track` and pass that and our talks into a `createSchedule` function, which recursively adds talks to the Track class, until no talks remain.
 
 The Track class first fills all morning sessions, and continues to do so until the time remaining is greater than the shortest duration of remaining talks.  If the morning session is full, the Track class will fill the afternoon session based on the same principle, and if both are full, instantiate a new Track, until all talks have been added, at which point the scheduled talks are returned.
 
