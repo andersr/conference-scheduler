@@ -56,6 +56,7 @@ var Track = /** @class */ (function () {
     Track.prototype.setScheduledTime = function (type, duration) {
         var currentEndTime = type === 'morning' ? this.morningCurrentEndTime : this.afternoonCurrentEndTime;
         var hours = Math.floor(currentEndTime / 60);
+        var hoursConverted = hours > 12 ? hours - 12 : hours;
         var minutes = currentEndTime % 60;
         var isAmPm = currentEndTime >= 720;
         if (type === 'morning') {
@@ -64,7 +65,7 @@ var Track = /** @class */ (function () {
         else {
             this.afternoonCurrentEndTime = this.afternoonCurrentEndTime + duration;
         }
-        return "" + (hours < 10 ? '0' : '') + (hours > 12 ? hours - 12 : hours) + ":" + (minutes < 10 ? '0' : '') + minutes + (isAmPm ? 'PM' : 'AM');
+        return "" + (hoursConverted < 10 ? '0' : '') + hoursConverted + ":" + (minutes < 10 ? '0' : '') + minutes + (isAmPm ? 'PM' : 'AM');
     };
     Track.prototype.addNetworkingEvent = function () {
         this.addToSession('afternoon', {

@@ -70,6 +70,7 @@ export class Track {
     setScheduledTime(type: TrackSession, duration: number) {
         const currentEndTime = type === 'morning' ? this.morningCurrentEndTime : this.afternoonCurrentEndTime;
         const hours = Math.floor(currentEndTime / 60);
+        const hoursConverted = hours > 12 ? hours - 12 : hours;
         const minutes = currentEndTime % 60;
         const isAmPm = currentEndTime >= 720;
         if (type === 'morning') {
@@ -77,7 +78,7 @@ export class Track {
         } else {
             this.afternoonCurrentEndTime = this.afternoonCurrentEndTime + duration;
         }
-        return `${hours < 10 ? '0': ''}${hours > 12 ? hours - 12 : hours}:${minutes < 10 ? '0': ''}${minutes}${isAmPm ? 'PM' : 'AM'}`
+        return `${hoursConverted < 10 ? '0': ''}${hoursConverted}:${minutes < 10 ? '0': ''}${minutes}${isAmPm ? 'PM' : 'AM'}`
     }
 
     addNetworkingEvent() {
