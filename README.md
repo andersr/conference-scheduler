@@ -24,6 +24,6 @@ First, we parse the text file and convert that into a 'talks' array, with proper
 
 The Track class first fills all morning sessions, and continues to do so until the time remaining is greater than the shortest duration of remaining talks.  If the morning session is full, the Track class will fill the afternoon session based on the same principle, and if both are full, instantiate a new Track, until all talks have been added, at which point the scheduled talks are returned.
 
-The Track class also appends a "networking event" which really is just a talk with no duration.
+The Track class also appends a "networking event" to the end of the afternoon session.
 
 The scheduled talks are then passed into a `outputSchedule` method, which adds a bit of formatting, and also adds a lunch section between the sessions.
